@@ -4,18 +4,13 @@ import time
 import os
 import sys
 
-def read_network(filename):
-    """
-    Reads the implicit network arcs from the file.
-    Returns a list of unique nodes and a list of arcs (u, v).
-    """
+def read_network(filename)
     arcs = []
     nodes = set()
     try:
         with open(filename, 'r') as f:
             for line in f:
                 parts = line.split()
-                # Skip empty lines or headers
                 if len(parts) < 2:
                     continue
                 try:
@@ -24,7 +19,7 @@ def read_network(filename):
                     nodes.add(u)
                     nodes.add(v)
                 except ValueError:
-                    continue # Skip lines that don't start with integers
+                    continue 
     except Exception as e:
         print(f"Error reading {filename}: {e}")
         return [], []
@@ -43,13 +38,12 @@ def read_pairs(filename):
                 parts = line.split()
                 if len(parts) >= 3:
                     try:
-                        # Try to convert to numbers. If this fails (e.g. header), skip line.
                         vol = float(parts[0])
                         orig = int(parts[1])
                         dest = int(parts[2])
                         commodities.append({'vol': vol, 'orig': orig, 'dest': dest})
                     except ValueError:
-                        continue # Skip header or malformed lines
+                        continue 
     except Exception as e:
         print(f"Error reading {filename}: {e}")
         return []
@@ -58,7 +52,7 @@ def read_pairs(filename):
 def solve_charging_location(nodes, arcs, commodities, company_name):
     print(f"\n--- Solving for Company {company_name} ---")
     
-    Q = 10.0  # Capacity per station
+    Q = 10.0  
     
     m = gp.Model(f"ChargingLocation_{company_name}")
     m.setParam('OutputFlag', 0)
@@ -67,14 +61,14 @@ def solve_charging_location(nodes, arcs, commodities, company_name):
     arc_tuples = gp.tuplelist(arcs)
     x = {}
     
-    # Create variables only for necessary arcs to save memory
+   
     for k_idx, comm in enumerate(commodities):
         for i, j in arcs:
             x[k_idx, i, j] = m.addVar(lb=0.0, ub=1.0, vtype=GRB.CONTINUOUS)
 
     m.setObjective(gp.quicksum(y[i] for i in nodes), GRB.MINIMIZE)
     
-    # Constraints
+   
     for k_idx, comm in enumerate(commodities):
         s_k = comm['orig']
         t_k = comm['dest']
@@ -152,4 +146,5 @@ if __name__ == "__main__":
         if comp in results and results[comp][0] is not None:
             print(f"{comp:<5} | Count: {int(results[comp][0])} | Locs: {sorted(results[comp][1])}")
         else:
+
             print(f"{comp:<5} | N/A")
