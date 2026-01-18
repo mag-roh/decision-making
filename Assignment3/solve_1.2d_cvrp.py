@@ -76,7 +76,6 @@ def apply_refill_recourse(route, q_tilde, Q, C, verbose=False):
             print(f"Serve {served} (partial). Remaining={rem}. Need refill trips.")
         cap = 0
 
-        # refill until remaining is served
         while rem > 0:
             # detour i -> depot -> i
             extra += int(C[node, 0]) + int(C[0, node])
@@ -97,7 +96,6 @@ if __name__ == "__main__":
     Q, q_nom, C = read_instance("instance.txt")
     rng = np.random.default_rng(0)
 
-    # find one violating scenario + route
     for attempt in range(1, 100000):
         q_tilde = sample_demands(q_nom, rng)
 

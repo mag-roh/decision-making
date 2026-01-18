@@ -1,7 +1,6 @@
 import numpy as np
 import math
 
-# ---- your routes from 1.2(a) (copy-paste exactly) ----
 ROUTES = [
     [0, 1, 11, 22, 7, 14, 25, 0],
     [0, 8, 10, 6, 17, 4, 23, 0],
@@ -13,8 +12,8 @@ ROUTES = [
 def read_instance(path="instance.txt"):
     lines = [ln.strip() for ln in open(path) if ln.strip()]
     Q = int(lines[0])
-    dem = list(map(int, lines[1].split()))  # customers 1..25
-    q = np.array([0] + dem, dtype=int)      # q[0]=0 depot
+    dem = list(map(int, lines[1].split()))  
+    q = np.array([0] + dem, dtype=int)      
     return Q, q
 
 def simulate_12b(routes, Q, q_nominal, k=1000, seed=0):
@@ -25,7 +24,7 @@ def simulate_12b(routes, Q, q_nominal, k=1000, seed=0):
     - total violation is sum of route violations
     """
     rng = np.random.default_rng(seed)
-    n = len(q_nominal) - 1  # customers 1..n
+    n = len(q_nominal) - 1  
 
     totalV = np.zeros(k, dtype=int)
 
@@ -35,9 +34,8 @@ def simulate_12b(routes, Q, q_nominal, k=1000, seed=0):
         for i in range(1, n + 1):
             lo = int(math.floor(0.9 * q_nominal[i]))
             hi = int(math.ceil(1.1 * q_nominal[i]))
-            q_tilde[i] = rng.integers(lo, hi + 1)  # inclusive
+            q_tilde[i] = rng.integers(lo, hi + 1)  
 
-        # compute total violation over routes
         V = 0
         for r in routes:
             cust = [i for i in r if i != 0]

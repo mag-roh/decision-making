@@ -29,7 +29,9 @@ def apply_refill_recourse(route, q_tilde, Q, C):
     for a, b in zip(route[:-1], route[1:]):
         base_cost += int(C[a, b])
 
-    extra = 0 cap = Q
+    extra = 0
+    cap = Q
+
     for node in route[1:]:
         if node == 0:
             break
